@@ -1,0 +1,742 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rayen Latrech</title>
+<meta name="description" content="Rayen Latrech, Master's student in Data Science. Research on detecting underexplored research areas from citation graphs, retrieval over EU law, clinical trial risk, and an automated eBay deal finder.">
+<meta property="og:title" content="Rayen Latrech">
+<meta property="og:description" content="Machine learning systems, each measured against the simplest thing it had to beat.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0E1630">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230E1630'/%3E%3Ccircle cx='10' cy='11' r='3' fill='%23E8ECF6'/%3E%3Ccircle cx='20' cy='9' r='2.5' fill='%23E8ECF6'/%3E%3Ccircle cx='15' cy='21' r='4' fill='%238EA2FF'/%3E%3Cpath d='M10 11 20 9M10 11l5 10M20 9l-5 12' stroke='%23E8ECF6' stroke-width='1.2'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #EEF1F5;
+    --paper-2: #E5EAF1;
+    --ink: #18202E;
+    --muted: #586276;
+    --line: #D1D8E2;
+    --model: #2B47D9;
+    --base: #B4BBC7;
+    --on-model: #FFFFFF;
+    --strike: #C2463A;
+
+    --night: #0E1630;
+    --night-2: #16204A;
+    --night-ink: #E8ECF6;
+    --night-muted: #9AA6C4;
+    --night-line: #26325E;
+    --glow: #8EA2FF;
+
+    --wrap: 1120px;
+    --radius: 6px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #111827;
+      --paper-2: #151E30;
+      --ink: #E6EAF1;
+      --muted: #9AA4B5;
+      --line: #283247;
+      --model: #7F95FF;
+      --base: #4A5468;
+      --on-model: #0E1530;
+      --strike: #F08A7E;
+      --night: #0A1024;
+      --night-2: #111A38;
+      --night-line: #222D55;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 72px; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Bricolage Grotesque", system-ui, sans-serif;
+    font-optical-sizing: auto;
+    font-size: 1.0625rem;
+    line-height: 1.55;
+  }
+  a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  a:hover { color: var(--model); }
+  :focus-visible { outline: 2px solid var(--model); outline-offset: 3px; border-radius: 3px; }
+  .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 28px; }
+  .skip { position: absolute; left: -9999px; }
+  .skip:focus { left: 16px; top: 12px; z-index: 50; background: var(--paper); padding: 8px 12px; }
+
+  /* ================= Nav ================= */
+  .nav {
+    position: fixed; inset: 0 0 auto 0; z-index: 20;
+    color: var(--night-ink);
+    transition: background-color .3s, color .3s, box-shadow .3s;
+  }
+  .nav .wrap { display: flex; justify-content: space-between; align-items: center; height: 64px; }
+  .nav .brand { font-weight: 650; text-decoration: none; letter-spacing: -0.01em; }
+  .nav ul { display: flex; gap: 26px; list-style: none; margin: 0; padding: 0; font-size: 0.95rem; }
+  .nav ul a { text-decoration: none; opacity: .85; }
+  .nav ul a:hover { opacity: 1; color: inherit; text-decoration: underline; }
+  .nav.solid {
+    background: color-mix(in srgb, var(--paper) 86%, transparent);
+    -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+    color: var(--ink); box-shadow: 0 1px 0 var(--line);
+  }
+  @media (max-width: 640px) { .nav ul li.opt { display: none; } .nav ul { gap: 18px; } }
+
+  /* ================= Hero ================= */
+  .hero {
+    position: relative; overflow: hidden;
+    background: radial-gradient(120% 90% at 78% 40%, var(--night-2) 0%, var(--night) 62%);
+    color: var(--night-ink);
+    min-height: min(92vh, 860px);
+    display: flex; align-items: center;
+  }
+  .hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .hero .wrap { position: relative; width: 100%; padding-top: 96px; padding-bottom: 72px; pointer-events: none; }
+  .hero .wrap > * { pointer-events: auto; }
+  .hero h1 {
+    margin: 0;
+    font-size: clamp(4.2rem, 10.5vw, 9rem);
+    font-weight: 760; font-stretch: 76%;
+    line-height: 0.88; letter-spacing: -0.04em;
+  }
+  .hero .intro {
+    margin: 30px 0 0; max-width: 31ch;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem); line-height: 1.38;
+    color: var(--night-ink);
+  }
+  .hero .intro span { color: var(--night-muted); }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 11px 18px; border-radius: 999px;
+    font-size: 0.98rem; font-weight: 600; text-decoration: none;
+    border: 1px solid var(--night-line); color: var(--night-ink);
+    background: color-mix(in srgb, var(--night) 60%, transparent);
+    transition: border-color .2s, background-color .2s;
+  }
+  .btn:hover { color: var(--night-ink); border-color: var(--glow); background: var(--night-2); }
+  .btn.primary { background: var(--glow); border-color: var(--glow); color: #0B1430; }
+  .btn.primary:hover { background: #A9B8FF; color: #0B1430; }
+  .btn svg { width: 17px; height: 17px; flex: none; }
+  .hero .legend {
+    position: absolute; right: max(28px, calc((100vw - var(--wrap)) / 2 + 28px)); bottom: 24px; margin: 0;
+    font-size: 0.82rem; color: var(--night-muted); max-width: 36ch; text-align: right;
+  }
+  .hero .legend i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--glow); margin-right: 6px; vertical-align: 0; box-shadow: 0 0 10px var(--glow); }
+  @media (max-width: 760px) {
+    .hero { min-height: auto; }
+    .hero .wrap { padding-top: 104px; padding-bottom: 96px; }
+    .hero .legend { left: 28px; right: 28px; text-align: left; }
+  }
+
+  /* ================= Sections ================= */
+  section.block { padding: 112px 0; }
+  .head { max-width: 64ch; margin-bottom: 48px; }
+  h2 {
+    margin: 0;
+    font-size: clamp(2.1rem, 4.6vw, 3.4rem);
+    font-weight: 720; font-stretch: 82%;
+    line-height: 1.02; letter-spacing: -0.025em;
+  }
+  .lede { margin: 16px 0 0; color: var(--muted); font-size: 1.1rem; max-width: 60ch; }
+  .kind { margin: 0 0 14px; color: var(--model); font-weight: 650; font-size: 0.98rem; }
+
+  /* ================= Bars (shared) ================= */
+  .metric { font-size: 0.88rem; color: var(--muted); margin: 0 0 8px; }
+  .bar { display: grid; grid-template-columns: minmax(0, 1fr) 4.2ch; align-items: center; gap: 12px; margin-top: 10px; }
+  .bar .track { position: relative; height: 32px; background: linear-gradient(to right, transparent calc(100% - 1px), var(--line) 0); }
+  .bar .fill {
+    position: absolute; inset: 0 auto 0 0; border-radius: 4px;
+    width: calc(var(--v) / var(--max, 1) * 100%);
+    transform-origin: left center;
+  }
+  .bar.model .fill { background: var(--model); }
+  .bar.base .fill { background: var(--base); }
+  .bar .ci {
+    position: absolute; top: 50%; height: 12px; margin-top: -6px;
+    left: calc(var(--lo) / var(--max, 1) * 100%);
+    width: calc((var(--hi) - var(--lo)) / var(--max, 1) * 100%);
+    border: 2px solid var(--ink); border-top: 0; border-bottom: 0;
+    background: linear-gradient(var(--ink), var(--ink)) center / 100% 2px no-repeat;
+    opacity: .75;
+  }
+  .bar .name { position: relative; z-index: 1; display: flex; align-items: center; height: 100%; padding-left: 11px; font-size: 0.86rem; white-space: nowrap; }
+  .bar.model .name { color: var(--on-model); font-weight: 600; }
+  .bar .val { font-variant-numeric: tabular-nums; font-weight: 680; text-align: right; }
+  .bar.base .val { font-weight: 450; color: var(--muted); }
+
+  .js .viz .fill, .js .viz .ci { transform: scaleX(0); transition: transform 1s cubic-bezier(.2,.7,.2,1); }
+  .js .viz .ci { transform: none; opacity: 0; transition: opacity .5s .8s; }
+  .js .viz.shown .fill { transform: scaleX(1); }
+  .js .viz.shown .bar + .bar .fill { transition-delay: 90ms; }
+  .js .viz.shown .bar + .bar + .bar .fill { transition-delay: 180ms; }
+  .js .viz.shown .ci { opacity: .75; }
+
+  /* ================= Thesis ================= */
+  .thesis { background: var(--paper-2); }
+  .thesis-top { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 64px; align-items: start; }
+  .thesis h3.title {
+    margin: 0; font-size: clamp(1.75rem, 3.3vw, 2.6rem);
+    font-weight: 700; font-stretch: 85%; line-height: 1.08; letter-spacing: -0.02em;
+  }
+  .qa { margin-top: 28px; display: grid; gap: 18px; max-width: 58ch; }
+  .qa p { margin: 0; }
+  .qa strong { display: block; font-weight: 650; margin-bottom: 2px; }
+  .qa span { color: var(--muted); }
+  .result-panel { padding-top: 6px; }
+  .result-panel .note { margin: 14px 0 0; font-size: 0.86rem; color: var(--muted); }
+
+  .pipeline { margin: 80px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; counter-reset: step; }
+  .pipeline li { position: relative; padding: 22px 22px 0 0; border-top: 2px solid var(--line); counter-increment: step; }
+  .pipeline li::before {
+    content: counter(step);
+    position: absolute; top: -15px; left: 0;
+    width: 28px; height: 28px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--paper-2); border: 2px solid var(--model); color: var(--model);
+    font-size: 0.85rem; font-weight: 700;
+  }
+  .pipeline li.last { border-top-color: var(--model); }
+  .pipeline li.last::before { background: var(--model); color: var(--on-model); }
+  .pipeline h4 { margin: 8px 0 6px; font-size: 1.05rem; font-weight: 650; }
+  .pipeline p { margin: 0; font-size: 0.93rem; color: var(--muted); }
+  .pipeline b { color: var(--ink); font-weight: 650; }
+
+  .rejected { margin-top: 88px; display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 64px; }
+  .rejected h3 { margin: 0; font-size: clamp(1.5rem, 2.6vw, 2rem); font-weight: 700; font-stretch: 85%; line-height: 1.1; letter-spacing: -0.015em; }
+  .rejected .side p { color: var(--muted); margin: 14px 0 0; }
+  .kills { list-style: none; margin: 0; padding: 0; }
+  .kills li { display: grid; grid-template-columns: 7.5ch minmax(0, 1fr); gap: 20px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .kills li:first-child { border-top: 1px solid var(--line); }
+  .kills .num {
+    font-size: 1.6rem; font-weight: 700; font-stretch: 80%; font-variant-numeric: tabular-nums;
+    color: var(--muted); text-decoration: line-through; text-decoration-color: var(--strike); text-decoration-thickness: 3px;
+    white-space: nowrap;
+  }
+  .kills .num.dash { text-decoration: none; }
+  .kills p { margin: 0; }
+  .kills p span { color: var(--muted); }
+  .kills li.kept .num { color: var(--model); text-decoration: none; }
+  .kills li.kept p strong { color: var(--ink); }
+
+  /* ================= Projects ================= */
+  .project { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px 64px; padding: 44px 0; border-top: 1px solid var(--line); }
+  .project:last-of-type { border-bottom: 1px solid var(--line); }
+  .project h3 { margin: 0; font-size: clamp(1.35rem, 2.2vw, 1.65rem); font-weight: 680; font-stretch: 88%; line-height: 1.15; letter-spacing: -0.01em; }
+  .project h3 a { text-decoration: none; }
+  .project h3 a:hover { text-decoration: underline; }
+  .project .desc { margin: 10px 0 0; color: var(--muted); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0 0; padding: 0; list-style: none; }
+  .chips li { font-size: 0.8rem; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+  .project .links { margin: 16px 0 0; display: flex; gap: 18px; font-size: 0.95rem; font-weight: 600; }
+
+  details { margin-top: 18px; }
+  summary {
+    cursor: pointer; list-style: none; display: inline-flex; align-items: center; gap: 8px;
+    font-weight: 600; font-size: 0.95rem; color: var(--model);
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::before {
+    content: ""; width: 8px; height: 8px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+    transform: rotate(-45deg); transition: transform .2s; margin-right: 2px;
+  }
+  details[open] summary::before { transform: rotate(45deg) translate(-2px, -2px); }
+  details ul { margin: 14px 0 0; padding-left: 1.1em; color: var(--muted); font-size: 0.97rem; display: grid; gap: 8px; }
+  details ul b { color: var(--ink); font-weight: 650; }
+
+  /* eBay funnel */
+  .funnel { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .funnel li {
+    width: var(--w); min-height: 38px; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 8px 14px; border-radius: 4px; font-size: 0.88rem;
+    background: color-mix(in srgb, var(--model) var(--a), var(--paper));
+    color: var(--ink);
+  }
+  .funnel li.end { background: var(--model); color: var(--on-model); font-weight: 600; }
+  .funnel li em { font-style: normal; color: inherit; opacity: .75; white-space: nowrap; }
+  .js .viz .funnel li { transform: scaleX(.2); opacity: 0; transform-origin: left; transition: transform .8s cubic-bezier(.2,.7,.2,1), opacity .5s; }
+  .js .viz.shown .funnel li { transform: none; opacity: 1; }
+  .js .viz.shown .funnel li:nth-child(2) { transition-delay: 100ms; }
+  .js .viz.shown .funnel li:nth-child(3) { transition-delay: 200ms; }
+  .js .viz.shown .funnel li:nth-child(4) { transition-delay: 300ms; }
+  .facts { display: flex; flex-wrap: wrap; gap: 8px 26px; margin: 18px 0 0; font-size: 0.92rem; color: var(--muted); }
+  .facts b { color: var(--ink); font-weight: 680; }
+
+  .now { margin-top: 72px; display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 64px; }
+  .now h3 { margin: 0; font-size: 1.5rem; font-weight: 700; font-stretch: 85%; }
+  .now .items { display: grid; gap: 18px; }
+  .now .items p { margin: 0; color: var(--muted); }
+  .now .items a { color: var(--ink); font-weight: 650; }
+  .more { margin: 40px 0 0; }
+
+  /* ================= Approach + tools ================= */
+  .approach { background: var(--paper-2); }
+  .principles { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px 64px; }
+  .principles strong { display: block; font-size: 1.2rem; font-weight: 680; font-stretch: 88%; margin-bottom: 6px; }
+  .principles span { color: var(--muted); }
+  .tools { margin: 88px 0 0; display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 64px; }
+  .tools h3 { margin: 0; font-size: 1.5rem; font-weight: 700; font-stretch: 85%; }
+  .tools dl { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 12px 32px; }
+  .tools dt { font-weight: 650; }
+  .tools dd { margin: 0; color: var(--muted); }
+
+  /* ================= Contact ================= */
+  .contact { background: var(--night); color: var(--night-ink); padding: 112px 0 40px; }
+  .contact h2 { color: var(--night-ink); }
+  .contact .lede { color: var(--night-muted); }
+  .contact .email {
+    display: inline-block; margin-top: 30px;
+    font-size: clamp(1.6rem, 5.4vw, 3.6rem); font-weight: 700; font-stretch: 80%;
+    letter-spacing: -0.02em; text-decoration-thickness: 2px; text-underline-offset: 8px; word-break: break-word;
+  }
+  .contact .email:hover { color: var(--glow); }
+  .contact .actions { margin-top: 32px; }
+  .contact footer { margin-top: 112px; padding-top: 24px; border-top: 1px solid var(--night-line); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 0.85rem; color: var(--night-muted); }
+  .contact footer a { text-decoration: none; }
+  .contact footer a:hover { color: var(--night-ink); text-decoration: underline; }
+
+  /* ================= Responsive ================= */
+  @media (max-width: 900px) {
+    .thesis-top, .rejected, .now, .tools { grid-template-columns: 1fr; gap: 36px; }
+    .pipeline { grid-template-columns: 1fr; gap: 0; margin-top: 64px; }
+    .pipeline li { border-top: 0; border-left: 2px solid var(--line); padding: 0 0 28px 30px; }
+    .pipeline li::before { top: -2px; left: -15px; }
+    .pipeline li.last { border-left-color: transparent; }
+    .pipeline h4 { margin-top: 0; }
+    .project { grid-template-columns: 1fr; gap: 24px; }
+    .principles { grid-template-columns: 1fr; gap: 28px; }
+  }
+  @media (max-width: 640px) {
+    .wrap { padding: 0 18px; }
+    section.block { padding: 80px 0; }
+    .tools dl { grid-template-columns: 1fr; gap: 2px; }
+    .tools dd { margin-bottom: 12px; }
+    .kills li { grid-template-columns: 1fr; gap: 4px; }
+    .kills .num.dash { display: none; }
+    .funnel li { width: 100% !important; }
+  }
+</style>
+</head>
+<body>
+<script>document.documentElement.classList.add('js')</script>
+<a class="skip" href="#thesis">Skip to content</a>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">Rayen Latrech</a>
+    <nav aria-label="Sections">
+      <ul>
+        <li><a href="#thesis">Thesis</a></li>
+        <li><a href="#work">Projects</a></li>
+        <li class="opt"><a href="#approach">Approach</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <!-- ================= HERO ================= -->
+  <section class="hero" aria-labelledby="name">
+    <canvas id="graph" aria-hidden="true"></canvas>
+    <div class="wrap">
+      <h1 id="name">Rayen<br>Latrech</h1>
+      <p class="intro">Master's student in Data Science. <span>I build machine learning systems from raw data to a working tool, and I measure every result against something simple first.</span></p>
+      <div class="actions">
+        <a class="btn primary" href="#thesis">See my work</a>
+        <a class="btn" href="https://www.linkedin.com/in/rayenlatrech/">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+          LinkedIn
+        </a>
+        <a class="btn" href="https://github.com/rayenlatrech">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.82-.26.82-.58v-2.03c-3.34.73-4.04-1.6-4.04-1.6-.55-1.4-1.34-1.77-1.34-1.77-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 0 1 1.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22v3.29c0 .32.21.7.82.58A12 12 0 0 0 12 .3"/></svg>
+          GitHub
+        </a>
+        <!-- To add a CV: upload cv.pdf to this repo, then remove the comment marks around the next line.
+        <a class="btn" href="cv.pdf">CV (PDF)</a>
+        -->
+      </div>
+    </div>
+    <p class="legend"><i></i>A loosely knit, outward-citing region: the kind of research area my thesis looks for.</p>
+  </section>
+
+  <!-- ================= THESIS ================= -->
+  <section class="block thesis" id="thesis" aria-labelledby="thesis-title">
+    <div class="wrap">
+      <div class="thesis-top">
+        <div>
+          <p class="kind">Master's thesis, in progress</p>
+          <h3 class="title" id="thesis-title">Graph-based detection of underexplored research areas</h3>
+          <div class="qa">
+            <p><strong>The question</strong><span>Can the shape of the citation graph alone, without reading a single abstract, point to research areas that are about to grow more than expected?</span></p>
+            <p><strong>The answer so far</strong><span>Yes, modestly. Regions that are coherent, loosely connected inside and cite heavily outward were about 1.6 times as likely as chance to grow above expectation, on 2021 to 2024 data the score never saw while it was being designed.</span></p>
+            <p><strong>What it becomes</strong><span>A search tool: type a topic, get a ranked list of nearby regions with the right shape and the papers in each, as a starting point for a researcher choosing what to read.</span></p>
+          </div>
+        </div>
+        <div class="result-panel viz">
+          <p class="metric">Flagged regions growing above expectation, 2021 to 2024. Lift, where 1 is chance and 2 is the maximum.</p>
+          <div class="bar model"><div class="track"><div class="fill" style="--v:1.63;--max:2"></div><span class="ci" style="--lo:1.59;--hi:1.67;--max:2"></span><span class="name">Text embeddings (SPECTER2)</span></div><span class="val">1.63</span></div>
+          <div class="bar model"><div class="track"><div class="fill" style="--v:1.42;--max:2"></div><span class="ci" style="--lo:1.37;--hi:1.47;--max:2"></span><span class="name">Graph structure only</span></div><span class="val">1.42</span></div>
+          <div class="bar base"><div class="track"><div class="fill" style="--v:1;--max:2"></div><span class="name">Chance</span></div><span class="val">1.00</span></div>
+          <p class="note">Whiskers show 95% intervals over 30 clustering seeds. Growth is measured after controlling for region size and citation count, so the score can't win just by picking big, popular areas.</p>
+        </div>
+      </div>
+
+      <ol class="pipeline" aria-label="How the thesis pipeline works">
+        <li><h4>Collect</h4><p><b>527,036</b> computer-science papers from arXiv, dated to the month.</p></li>
+        <li><h4>Repair the graph</h4><p>About <b>75%</b> of each paper's references were missing from the benchmark. Semantic Scholar recovered 95% of known links and added <b>297,486</b> new ones.</p></li>
+        <li><h4>Embed and cluster</h4><p>Papers embedded by their text and, separately, by citation structure alone, then grouped into topic regions.</p></li>
+        <li><h4>Score the regions</h4><p>High score for regions that hang together by topic but are loosely knit inside and lean on work from outside.</p></li>
+        <li class="last"><h4>Test once</h4><p>The score and every threshold were frozen and pre-registered, then run a <b>single time</b> on the unseen 2021 to 2024 era.</p></li>
+      </ol>
+
+      <div class="rejected">
+        <div class="side">
+          <h3>Four results I threw out before one held up</h3>
+          <p>Each looked like a finding. Each was killed by a control. The protocol that caught them is the most reusable part of the thesis.</p>
+        </div>
+        <ul class="kills">
+          <li><span class="num dash" aria-hidden="true">–</span><p><strong>Scoring individual papers.</strong> <span>Citation count alone explained it.</span></p></li>
+          <li><span class="num">1.65×</span><p><strong>A region score that included size.</strong> <span>Mostly a size effect: it fell to 1.09× once size was controlled.</span></p></li>
+          <li><span class="num">1.73×</span><p><strong>A proxy version of the signals.</strong> <span>It measured the wrong thing, a stand-in for density rather than density itself.</span></p></li>
+          <li><span class="num">1.97×</span><p><strong>A graph-learning variant.</strong> <span>Empty clusters maxed out both halves of the score. Fixed with a validity rule declared in advance.</span></p></li>
+          <li class="kept"><span class="num">1.63×</span><p><strong>The frozen score.</strong> <span>Survived controls for citation count, size, citation volume, time leakage and field diversity.</span></p></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PROJECTS ================= -->
+  <section class="block" id="work" aria-labelledby="work-title">
+    <div class="wrap">
+      <div class="head">
+        <h2 id="work-title">Selected projects</h2>
+        <p class="lede">A score means little on its own, so each one is shown against the simplest reasonable alternative.</p>
+      </div>
+
+      <!-- ===== PROJECT: copy from here ... ===== -->
+      <article class="project">
+        <div>
+          <h3><a href="https://github.com/rayenlatrech/ai-act-navigator">AI Act Navigator</a></h3>
+          <p class="desc">Ask what EU AI regulation required on any given date, and get an answer with article-level citations. Pulls the law straight from the EU's open data service, and refuses when it isn't confident.</p>
+          <ul class="chips"><li>Python</li><li>SPARQL</li><li>BM25</li><li>sentence-transformers</li><li>FastAPI</li><li>Docker</li></ul>
+          <details>
+            <summary>How it works</summary>
+            <ul>
+              <li><b>Chunked by article, not by length.</b> Splitting mid-article cut a rule off from its conditions; article-aware chunks lifted recall@5 from 0.51 to 0.75.</li>
+              <li><b>The biggest gain came from removing data.</b> Recitals were 55% of the text and took 47% of search slots, but were never the answer. Dropping them lifted recall@1 from 0.39 to 0.59.</li>
+              <li><b>Every citation is verified</b> against the passages actually retrieved: citation precision 1.00 on the evaluated set.</li>
+              <li><b>An honest weak spot:</b> hybrid search improved the headline numbers but hurt questions about dates (0.71 to 0.42), the capability the project exists for. It's documented as the main open problem.</li>
+              <li>Deployed as a 150 MB Docker image on a free tier.</li>
+            </ul>
+          </details>
+          <!-- When the demo is live, add a link here: <p class="links"><a href="https://YOUR-URL.onrender.com">Live demo</a></p> -->
+        </div>
+        <div class="viz">
+          <p class="metric">Recall@5 on 101 legal questions</p>
+          <div class="bar model"><div class="track"><div class="fill" style="--v:0.837"></div><span class="name">Article-aware hybrid search</span></div><span class="val">0.84</span></div>
+          <div class="bar base"><div class="track"><div class="fill" style="--v:0.510"></div><span class="name">Fixed-size chunks</span></div><span class="val">0.51</span></div>
+        </div>
+      </article>
+      <!-- ===== ... to here ===== -->
+
+      <article class="project">
+        <div>
+          <h3><a href="https://github.com/rayenlatrech/clinical-trial-termination">Predicting which clinical trials stop early</a></h3>
+          <p class="desc">Uses only what a trial's public ClinicalTrials.gov registration said in December 2018, and checks how it ended eight years later. Tested once on 10,970 trials the model never saw.</p>
+          <ul class="chips"><li>PostgreSQL</li><li>SQL</li><li>LightGBM</li><li>scikit-learn</li></ul>
+          <details>
+            <summary>How it works</summary>
+            <ul>
+              <li><b>A "time machine" design.</b> Features come from a December 2018 database snapshot and outcomes from a 2026 snapshot, so the model only knows what was knowable at the time.</li>
+              <li><b>Split by registration year:</b> train up to 2016, validate on 2017, test on 2018. The test set was scored exactly once.</li>
+              <li><b>Useful at the top of the list.</b> The riskiest 10% of trials stopped early 42.9% of the time, 2.2 times the average.</li>
+              <li><b>Limits stated plainly:</b> probabilities drift on a new year and would need recalibration before use; the ranking holds up.</li>
+            </ul>
+          </details>
+        </div>
+        <div class="viz">
+          <p class="metric">PR-AUC on trials registered in 2018</p>
+          <div class="bar model"><div class="track"><div class="fill" style="--v:0.361"></div><span class="name">LightGBM</span></div><span class="val">0.36</span></div>
+          <div class="bar base"><div class="track"><div class="fill" style="--v:0.198"></div><span class="name">No model</span></div><span class="val">0.20</span></div>
+        </div>
+      </article>
+
+      <article class="project">
+        <div>
+          <h3><a href="https://github.com/rayenlatrech/ebay-deal-finder">eBay deal finder</a></h3>
+          <p class="desc">A bot that scans eBay for underpriced used electronics every four hours, checks the promising ones with AI, and sends alerts to Telegram. It has run unattended on free tiers since June 2026.</p>
+          <ul class="chips"><li>Python</li><li>eBay API</li><li>Groq</li><li>Gemini Vision</li><li>Supabase</li><li>GitHub Actions</li></ul>
+          <details>
+            <summary>How it works</summary>
+            <ul>
+              <li><b>Cheap filters before expensive ones.</b> Hundreds of listings are cut to a few dozen with free checks, so the rate-limited AI only sees real candidates.</li>
+              <li><b>A market price that resists junk.</b> Each product's baseline is defended in layers: catalog-ID checks, accessory and for-parts detection, outlier trimming and blending with past runs.</li>
+              <li><b>Two AI checks:</b> a language model reads the description for scams and broken items, and a vision model checks the photo for stock images and visible damage.</li>
+              <li><b>Building its own dataset:</b> a tracker infers sale prices from listings that disappear, to estimate real resale values over time.</li>
+            </ul>
+          </details>
+        </div>
+        <div class="viz">
+          <p class="metric">Each scan, from listings to alerts</p>
+          <ol class="funnel">
+            <li style="--w:100%;--a:14%">Listings scanned <em>hundreds</em></li>
+            <li style="--w:78%;--a:28%">15% or more below market <em>a few dozen</em></li>
+            <li style="--w:56%;--a:46%">Passed text and photo checks <em>a handful</em></li>
+            <li class="end" style="--w:38%">Telegram alert</li>
+          </ol>
+          <p class="facts"><span><b>$0</b> a month to run</span><span><b>69</b> tests in CI</span><span><b>6</b> scans a day</span></p>
+        </div>
+      </article>
+
+      <article class="project">
+        <div>
+          <h3><a href="https://github.com/rayenlatrech/fraud-detection-paysim">Fraud detection on 6.3M transactions</a></h3>
+          <p class="desc">XGBoost on mobile-money data where about 1 in 800 transactions is fraud, with SHAP explanations and a what-if dashboard.</p>
+          <ul class="chips"><li>XGBoost</li><li>SHAP</li><li>Streamlit</li></ul>
+          <details>
+            <summary>How it works</summary>
+            <ul>
+              <li><b>Leaky columns removed.</b> The simulator's balance fields make fraud trivially easy to spot; dropping them keeps the task realistic.</li>
+              <li><b>Tested on the last 7 days</b> rather than a random split.</li>
+              <li><b>Explainable:</b> SHAP shows why each transaction was flagged, and the dashboard lets you change a transaction and watch the risk move.</li>
+            </ul>
+          </details>
+        </div>
+        <div class="viz">
+          <p class="metric">ROC-AUC on the last 7 days</p>
+          <div class="bar model"><div class="track"><div class="fill" style="--v:0.91"></div><span class="name">XGBoost</span></div><span class="val">0.91</span></div>
+          <div class="bar base"><div class="track"><div class="fill" style="--v:0.50"></div><span class="name">Random ranking</span></div><span class="val">0.50</span></div>
+        </div>
+      </article>
+
+      <article class="project">
+        <div>
+          <h3><a href="https://github.com/rayenlatrech/fake-news-detector">Multimodal fake news detection</a></h3>
+          <p class="desc">CLIP fine-tuned to judge a news post from its image and caption together, with a Gradio demo for new posts.</p>
+          <ul class="chips"><li>PyTorch</li><li>Hugging Face Transformers</li><li>Gradio</li></ul>
+          <details>
+            <summary>How it works</summary>
+            <ul>
+              <li><b>Image and text in one space.</b> CLIP embeds both; the two are combined and passed to a small classifier, fine-tuned end to end.</li>
+              <li><b>Catches almost every fake:</b> 99% recall on fake posts, at the cost of flagging about 8% of real ones.</li>
+            </ul>
+          </details>
+        </div>
+        <div class="viz">
+          <p class="metric">Validation accuracy, balanced classes</p>
+          <div class="bar model"><div class="track"><div class="fill" style="--v:0.958"></div><span class="name">CLIP + classifier</span></div><span class="val">0.96</span></div>
+          <div class="bar base"><div class="track"><div class="fill" style="--v:0.50"></div><span class="name">Guessing one class</span></div><span class="val">0.50</span></div>
+        </div>
+      </article>
+
+      <div class="now">
+        <h3>Working on now</h3>
+        <div class="items">
+          <p><a href="https://github.com/rayenlatrech/cpv-match">CPV Match</a>: semantic search over EU public procurement notices. The corpus and frozen splits are built and <a href="https://huggingface.co/datasets/Rayenlat/cpv-match-corpus">published on Hugging Face</a>, with baselines measured. Fine-tuning is next.</p>
+          <p><a href="https://github.com/rayenlatrech/rail-disruptions-nl">Dutch rail disruptions</a>: predicting, the moment a disruption is announced, whether it will last long. Seven years of data, cleaned and explored.</p>
+        </div>
+      </div>
+
+      <p class="more"><a href="https://github.com/rayenlatrech?tab=repositories">All repositories on GitHub</a></p>
+    </div>
+  </section>
+
+  <!-- ================= APPROACH ================= -->
+  <section class="block approach" id="approach" aria-labelledby="approach-title">
+    <div class="wrap">
+      <div class="head">
+        <h2 id="approach-title">How I work</h2>
+        <p class="lede">The same habits run through every project above.</p>
+      </div>
+      <ul class="principles">
+        <li><strong>Start with a baseline.</strong><span>Every result needs something simple to beat, or it doesn't mean much.</span></li>
+        <li><strong>Split data the way it will be used.</strong><span>Train on the past and test on the future, never on a random shuffle of both.</span></li>
+        <li><strong>Freeze the test before looking at it.</strong><span>Decide the model and the metric first, then score the test set once.</span></li>
+        <li><strong>Look for leakage before trusting a good score.</strong><span>A near-perfect result is a reason to check the data, not to celebrate.</span></li>
+        <li><strong>Report what didn't work.</strong><span>Rejected results and weak spots go in the write-up, next to the wins.</span></li>
+        <li><strong>Ship something people can use.</strong><span>A search tool, an API, a dashboard or a bot, so the work doesn't end in a notebook.</span></li>
+      </ul>
+
+      <div class="tools">
+        <h3>Tools</h3>
+        <dl>
+          <dt>Languages</dt><dd>Python, SQL</dd>
+          <dt>Machine learning</dt><dd>PyTorch, scikit-learn, XGBoost, LightGBM, Hugging Face Transformers</dd>
+          <dt>Retrieval and graphs</dt><dd>BM25, sentence-transformers, SPECTER2, graph embeddings, citation network analysis</dd>
+          <dt>LLMs and vision</dt><dd>Groq, Gemini, CLIP, retrieval-augmented generation</dd>
+          <dt>Data</dt><dd>pandas, NumPy, PostgreSQL, Supabase, SPARQL, REST APIs</dd>
+          <dt>Shipping</dt><dd>FastAPI, Docker, GitHub Actions, Streamlit, Gradio</dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONTACT ================= -->
+  <section class="contact" id="contact" aria-labelledby="contact-title">
+    <div class="wrap">
+      <h2 id="contact-title">Get in touch</h2>
+      <p class="lede">Open to internships and data science roles.</p>
+      <a class="email" href="mailto:rayen.latrech1@gmail.com">rayen.latrech1@gmail.com</a>
+      <div class="actions">
+        <a class="btn" href="https://www.linkedin.com/in/rayenlatrech/">LinkedIn</a>
+        <a class="btn" href="https://github.com/rayenlatrech">GitHub</a>
+      </div>
+      <footer>
+        <span>Rayen Latrech</span>
+        <a href="#top">Back to top</a>
+      </footer>
+    </div>
+  </section>
+</main>
+
+<script>
+/* ---------- Nav turns solid after the hero ---------- */
+(function () {
+  var nav = document.getElementById('nav');
+  var hero = document.querySelector('.hero');
+  function update() {
+    nav.classList.toggle('solid', hero.getBoundingClientRect().bottom < 64);
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+
+/* ---------- Charts animate in once, when visible ---------- */
+(function () {
+  var items = document.querySelectorAll('.viz');
+  if (!('IntersectionObserver' in window)) { items.forEach(function (el) { el.classList.add('shown'); }); return; }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('shown'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.35 });
+  items.forEach(function (el) { io.observe(el); });
+})();
+
+/* ---------- Hero: a drifting citation graph ---------- */
+(function () {
+  var canvas = document.getElementById('graph');
+  var ctx = canvas.getContext('2d');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var W, H, dpr, nodes = [], edges = [], special, raf;
+
+  // small seeded random, so the layout is the same on every visit
+  var seed = 7;
+  function rand() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+  function gauss() { return (rand() + rand() + rand() - 1.5) / 1.5; }
+
+  function build() {
+    nodes = []; edges = [];
+    seed = 7;
+    var mobile = W < 760;
+    // cluster centres sit to the right on desktop, spread out on mobile
+    var cx0 = mobile ? 0.5 : 0.70, spanX = mobile ? 0.42 : 0.26, spanY = 0.34;
+    var clusters = [
+      [-0.9, -0.55, 22, 0.05], [0.15, -0.95, 18, 0.045], [0.95, -0.35, 20, 0.05],
+      [-0.55, 0.6, 19, 0.048], [0.7, 0.75, 21, 0.05], [1.25, 0.25, 14, 0.042],
+      [0.05, 0.05, 15, 0.11, true]   // the loose, outward-looking one
+    ];
+    var s = Math.min(W, H);
+    clusters.forEach(function (c, ci) {
+      var cx = W * (cx0 + c[0] * spanX * 0.74), cy = H * (0.5 + c[1] * spanY * 0.74);
+      var members = [];
+      for (var i = 0; i < c[2]; i++) {
+        var n = {
+          bx: cx + gauss() * s * c[3] * 1.9, by: cy + gauss() * s * c[3] * 1.9,
+          r: 1.6 + rand() * 1.8, c: ci, hot: !!c[4],
+          ph: rand() * Math.PI * 2, sp: 0.25 + rand() * 0.35, amp: 3 + rand() * 6
+        };
+        nodes.push(n); members.push(nodes.length - 1);
+      }
+      if (c[4]) special = { cx: cx, cy: cy, members: members };
+      // internal edges: dense for ordinary clusters, sparse for the special one
+      var density = c[4] ? 0.6 : 2.2;
+      for (var k = 0; k < members.length * density; k++) {
+        var a = members[Math.floor(rand() * members.length)], b = members[Math.floor(rand() * members.length)];
+        if (a !== b) edges.push([a, b, c[4] ? 2 : 0]);
+      }
+    });
+    // edges between clusters; the special cluster reaches out a lot
+    var ordinary = nodes.map(function (n, i) { return i; }).filter(function (i) { return !nodes[i].hot; });
+    for (var e = 0; e < 18; e++) {
+      var a = ordinary[Math.floor(rand() * ordinary.length)], b = ordinary[Math.floor(rand() * ordinary.length)];
+      if (nodes[a].c !== nodes[b].c) edges.push([a, b, 1]);
+    }
+    special.members.forEach(function (m) {
+      for (var j = 0; j < 2; j++) edges.push([m, ordinary[Math.floor(rand() * ordinary.length)], 3]);
+    });
+  }
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = canvas.clientWidth; H = canvas.clientHeight;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    build();
+  }
+
+  function draw(t) {
+    var time = t / 1000;
+    ctx.clearRect(0, 0, W, H);
+    var mobile = W < 760;
+    var fade = mobile ? 0.3 : 1;
+    nodes.forEach(function (n) {
+      n.x = n.bx + Math.cos(time * n.sp + n.ph) * n.amp;
+      n.y = n.by + Math.sin(time * n.sp * 0.9 + n.ph) * n.amp;
+    });
+    // edges
+    edges.forEach(function (e) {
+      var a = nodes[e[0]], b = nodes[e[1]];
+      if (e[2] === 3) {
+        ctx.strokeStyle = 'rgba(142,162,255,' + (0.22 * fade) + ')'; ctx.lineWidth = 1;
+      } else if (e[2] === 2) {
+        ctx.strokeStyle = 'rgba(142,162,255,' + (0.35 * fade) + ')'; ctx.lineWidth = 1;
+      } else if (e[2] === 1) {
+        ctx.strokeStyle = 'rgba(232,236,246,' + (0.07 * fade) + ')'; ctx.lineWidth = 0.8;
+      } else {
+        ctx.strokeStyle = 'rgba(232,236,246,' + (0.16 * fade) + ')'; ctx.lineWidth = 0.8;
+      }
+      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+    });
+    // pulse around the special region
+    var pulse = reduce ? 0.5 : (Math.sin(time * 1.2) + 1) / 2;
+    var R = Math.min(W, H) * (0.16 + pulse * 0.02);
+    var g = ctx.createRadialGradient(special.cx, special.cy, 0, special.cx, special.cy, R);
+    g.addColorStop(0, 'rgba(142,162,255,' + (0.16 * fade) + ')');
+    g.addColorStop(1, 'rgba(142,162,255,0)');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(special.cx, special.cy, R, 0, Math.PI * 2); ctx.fill();
+    // nodes
+    nodes.forEach(function (n) {
+      ctx.beginPath(); ctx.arc(n.x, n.y, n.hot ? n.r + 1 : n.r, 0, Math.PI * 2);
+      if (n.hot) {
+        ctx.fillStyle = 'rgba(142,162,255,' + fade + ')';
+        ctx.shadowColor = 'rgba(142,162,255,0.9)'; ctx.shadowBlur = 10;
+      } else {
+        ctx.fillStyle = 'rgba(232,236,246,' + (0.55 * fade) + ')'; ctx.shadowBlur = 0;
+      }
+      ctx.fill(); ctx.shadowBlur = 0;
+    });
+    if (!reduce) raf = requestAnimationFrame(draw);
+  }
+
+  function start() { cancelAnimationFrame(raf); resize(); draw(performance.now()); }
+  var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(start, 150); });
+
+  // pause the animation when the hero is off screen
+  if ('IntersectionObserver' in window && !reduce) {
+    new IntersectionObserver(function (e) {
+      if (e[0].isIntersecting) { start(); } else { cancelAnimationFrame(raf); }
+    }).observe(canvas);
+  } else { start(); }
+})();
+</script>
+</body>
+</html>
